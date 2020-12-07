@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication6
+{
+   
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> lista_liczb = new List<int>
+            {
+                1,2,55,90,34,6,25, 65, 43, 23, 3, 54,78,48,5,9,10, 72, 73, 2
+
+            };
+
+            IEnumerable<int> sekwencja = lista_liczb
+                .Where(obiekt => lista_liczb.Max() - obiekt <= 25)
+                .OrderByDescending(obiekt => obiekt);
+
+            //skladnia zapytan
+            IEnumerable<int> sekwencjab = from obiekt in lista_liczb
+                                          where lista_liczb.Max() - obiekt <= 25
+                                          orderby obiekt descending
+                                          select obiekt;
+
+
+            foreach (int obj in sekwencja)
+                Console.WriteLine(obj);
+            Console.WriteLine();
+           
+            foreach (int obj in sekwencjab)
+                Console.WriteLine(obj);
+
+            Console.WriteLine();
+
+            //
+            
+            List<int> new_lista_liczb = lista_liczb;
+            new_lista_liczb.Sort(); //posortowanie
+            IEnumerable<int> sekwencja2 = new_lista_liczb
+              .Distinct();
+            for (int i=0; i<10; i++)
+            {
+                Console.WriteLine(sekwencja2.ElementAt(i));
+
+            }
+
+
+            //
+            Console.WriteLine();
+            IEnumerable<IGrouping<int, int>> sekwencja3 = lista_liczb
+                .OrderBy(element=>element)
+                .GroupBy(element => element.ToString().Length)
+            .OrderBy(grupy => grupy.Key);
+
+            foreach (IGrouping<int, int> grupa in sekwencja3)
+            {
+                Console.WriteLine($"Liczba cyfr: {grupa.Key} (liczb jest: {grupa.Count()})");
+                foreach (int liczba in grupa)
+                    Console.WriteLine(" - " + liczba);
+
+
+            }
+
+            Console.WriteLine();
+            IEnumerable<IGrouping<int, int>> sekwencja3b =
+                from element in lista_liczb
+                orderby element
+                group element by element.ToString().Length into grupy
+                orderby grupy.Key
+                select grupy;
+
+            foreach (IGrouping<int, int> grupa in sekwencja3b)
+            {
+                Console.WriteLine($"Liczba cyfr: {grupa.Key} (liczb jest: {grupa.Count()})");
+                foreach (int liczba in grupa)
+                    Console.WriteLine(" - " + liczba);
+
+
+            }
+
+
+
+            Console.ReadKey();
+        }
+    }
+}

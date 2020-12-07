@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication5
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //skladnia plynna
+            int[] liczby = { 1, 2, 3 };
+            IEnumerable<int> podwojone = liczby.Select(n => n * 2)
+                .OrderByDescending(n => n);
+            foreach (int n in podwojone)
+                Console.Write(n + " ");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            //skladnia zapytan
+
+            int[] liczby2 = { 1, 2, 3 };
+            IEnumerable<int> podwojone2 = 
+                from n in liczby2
+                orderby n descending
+                select n *2;
+            foreach (int n in podwojone2)
+                Console.Write(n + " ");
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            //zmienna lokalna - polecenie let
+
+            IEnumerable<double> odchylenia = from n in liczby
+                                             let srednia = liczby.Average()
+                                             select Math.Abs(n - srednia);
+            foreach (double n in odchylenia)
+                Console.Write(n + " ");
+
+            Console.WriteLine();
+            Console.WriteLine();
+
+            //wykonanie opoznione/leniwe
+
+            int[] liczby3 = { 1, 2, 3 };
+            IEnumerable<int> podwojone3 = liczby3.Select(n => n * 2)
+                .OrderByDescending(n => n);
+            liczby3[0] = -1; //to sie wykona zanim wykona sie powyzsze
+            foreach (int n in podwojone3)
+                Console.Write(n + " ");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            //ToList()
+
+            int[] liczby4 = { 1, 2, 3 };
+            IEnumerable<int> podwojone4 = liczby4.Select(n => n * 2)
+                .OrderByDescending(n => n)
+                .ToList(); //natychmiast daje liste
+            liczby3[0] = -1; 
+            foreach (int n in podwojone4)
+                Console.Write(n + " ");
+            Console.WriteLine();
+            Console.WriteLine();
+
+            //zmienna jest uwzgledniania taka, jaka jest w trakcie wykonywania zapytania
+            int[] liczby5 = { 1, 2, 3 };
+            int mnoznik = 2;
+            IEnumerable<int> podwojone5 = liczby5.Select(n => n * mnoznik)
+                .OrderByDescending(n => n);
+               // .ToList(); 
+            mnoznik = -2;
+            foreach (int n in podwojone5)
+                Console.Write(n + " ");
+            Console.WriteLine();
+            Console.WriteLine();
+
+
+            Console.ReadKey();
+
+        }
+    }
+}

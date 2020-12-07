@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication6
+{
+    public class Towar
+    {
+        public string magazyn;
+        public string nazwa;
+        public double cena;
+        public int ilosc;
+
+        public override string ToString()
+        {
+            return $"{magazyn}, {nazwa}, cena: {cena}zl, ilosc: {ilosc}.";
+        }
+
+        public Towar(string mag, string naz, double cen, int ile)
+        {
+            magazyn = mag;
+            nazwa = naz;
+            cena = cen;
+            ilosc = ile;
+
+        }
+
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Towar> lista_towarow = new List<Towar>()
+            {
+                new Towar("mag1", "Pendrive", 29.99, 50),
+                new Towar("mag1", "Ksiazka", 49.99, 19),
+                new Towar("mag2", "Dlugopis", 3, 11),
+                new Towar("mag3", "Olowek", 2.5, 9),
+                new Towar("mag2", "Maslo", 3.5, 2)
+
+            };
+
+            IEnumerable<Towar> towaryA = lista_towarow
+                .Where(obiekt => obiekt.cena < 5)
+                .OrderBy(obiekt => obiekt.nazwa);
+
+            //skladnia zapytan:
+            // IEnumerable<Towar> towaryA = 
+            // from obiekt in lista_towarow
+            // where obiekt.cena < 5
+            // orderby obiekt.nazwa
+            // select obiekt;
+
+
+            foreach (Towar t in towaryA)
+            {
+                Console.WriteLine(t.ToString());
+
+            }
+
+            double laczna_suma = lista_towarow
+                .Sum(obiekt => obiekt.cena * obiekt.ilosc);
+            Console.WriteLine();
+            Console.WriteLine($"Wartosc wszystkich towarow to: {laczna_suma}.");
+
+
+            IEnumerable<IGrouping<string, Towar>> grupyTowarow = lista_towarow
+                .GroupBy(obiekt => obiekt.magazyn)
+                .OrderBy(grupy => grupy.Key);
+
+            //skladnia zapytan:
+            // IEnumerable<IGrouping<string, Towar>> grupyTowarow =
+            // from obiekt in towary
+            // group obiekt by obiekt.magazyn into grupy
+            // orderby grupy.Key
+            // select grupy;
+            Console.WriteLine();
+            foreach(var grupa in grupyTowarow)
+            {
+                Console.WriteLine($"Magazyn {grupa.Key}: ");
+                foreach (Towar t in grupa)
+                {
+                    Console.WriteLine(t.ToString());
+
+                }
+
+            }
+            
+            Console.ReadKey();
+        }
+    }
+}

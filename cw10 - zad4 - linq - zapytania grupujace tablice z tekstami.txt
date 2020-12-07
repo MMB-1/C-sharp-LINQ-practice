@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication5
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] tab = { "piec", "dziewiec", "pietnascie", "dwa", "dziesiec" };
+
+            //skladnia plynna
+
+            IEnumerable<string> sekwencjaA =
+                tab.OrderBy(n => n.Length)
+                .ThenBy(n => n);
+            foreach (string tekst in sekwencjaA)
+            {
+
+                Console.Write(tekst + " ");
+            }
+
+            Console.WriteLine();
+
+            //skladnia zapytan
+            IEnumerable<string> sekwencjaA2 =
+                from element in tab
+                orderby element.Length, element
+                select element; 
+            foreach (string tekst in sekwencjaA2)
+            {
+                Console.Write(tekst + " ");
+
+            }
+            Console.WriteLine();
+
+            //B - skladnia plynna
+
+            IEnumerable<IGrouping<char, string>> sekwencjaB =
+                tab.GroupBy(element => element[0]);
+            foreach (IGrouping<char,string> grupa in sekwencjaB)
+            {
+                Console.WriteLine($"Litera {grupa.Key} ({grupa.Count()})");
+                foreach (string nazwa in grupa)
+                    Console.WriteLine(" - " + nazwa);
+
+            }
+
+
+            //B - skladnia zapytan
+
+            IEnumerable<IGrouping<char, string>> sekwencjaB2 =
+                from element in tab group element by element[0];
+            foreach (IGrouping<char, string> grupa in sekwencjaB2)
+            {
+                Console.WriteLine($"Litera {grupa.Key} ({grupa.Count()})");
+                foreach (string nazwa in grupa)
+                    Console.WriteLine(" - " + nazwa);
+
+            }
+
+            Console.WriteLine();
+            //C - skladnia plynna
+
+            IEnumerable<IGrouping<char, string>> sekwencjaC =
+                tab.OrderBy(element => element)
+               .GroupBy(element => element[0])
+              .OrderBy(grupy => grupy.Key);
+            foreach (IGrouping<char, string> grupa in sekwencjaC)
+            {
+                Console.WriteLine($"Litera {grupa.Key} ({grupa.Count()})");
+                foreach (string nazwa in grupa)
+                    Console.WriteLine(" - " + nazwa);
+
+
+            }
+            Console.WriteLine();
+            //C - skladnia zapytan
+            IEnumerable<IGrouping<char, string>> sekwencjaC2 =
+                from element in tab orderby element group element by element[0] into grupy
+                orderby grupy.Key select grupy;
+            foreach (IGrouping<char, string> grupa in sekwencjaC2)
+            {
+                Console.WriteLine($"Litera {grupa.Key} ({grupa.Count()})");
+                foreach (string nazwa in grupa)
+                    Console.WriteLine(" - " + nazwa);
+
+
+            }
+
+
+
+            Console.ReadKey();
+
+        }
+    }
+}
